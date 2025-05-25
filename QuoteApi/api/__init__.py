@@ -16,4 +16,6 @@ db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 migrate = Migrate(app, db)
 
-# TODO. Обязательно добавить импорт для обработчиков author и quote
+# DONE. Обязательно добавить импорт для обработчиков author и quote
+from api.handlers import author
+from api.handlers import quote
