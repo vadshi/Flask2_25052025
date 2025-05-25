@@ -7,3 +7,7 @@
 3. Устанавливаем зависимости: `pip install -r requirements.txt`
 4. Создаем локальную БД: `flask db upgrade`
 5. Запускаем приложение: `python run.py`
+
+## Ссылка на документацию
+1. Настройки для запуска `flask run` [тут](https://flask.palletsprojects.com/en/stable/cli/)
+2. Настройки для конфигов [тут](https://flask.palletsprojects.com/en/stable/config/)
