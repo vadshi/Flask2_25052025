@@ -1,4 +1,4 @@
-# Flask1_04052025
+# QuoteAPI
 
 ## Инструкция по развертыванию проекта
 1. Создать виртуальное окружение
@@ -15,7 +15,7 @@ python -m pip install -r requirements.txt
 ```
 4. Применить миграции
 ```
-flask db migrate
+flask db upgrade
 ```
 5. Запустить приложение
 ```
