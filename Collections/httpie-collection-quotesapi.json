@@ -267,7 +267,7 @@
                 "name": ""
               },
               "text": {
-                "value": "{\n  \"author\": \"Petr Ivanov\",\n  \"text\": \"Нет дыма без огня\",\n  \"bad_key\": \"value\"\n}",
+                "value": "{\n  \"text\": \"Нет дыма без огня\",\n  \"rating\": 2\n}",
                 "format": "application/json"
               },
               "form": {
@@ -426,7 +426,65 @@
                 "name": ""
               },
               "text": {
-                "value": "{\n  \"name\": \"Mark Twen\"\n}",
+                "value": "{\n  \"name\": \"Mark Second\"\n}",
+                "format": "application/json"
+              },
+              "form": {
+                "isMultipart": false,
+                "fields": []
+              },
+              "graphql": {
+                "query": "",
+                "variables": ""
+              }
+            }
+          },
+          {
+            "name": "Get all authors",
+            "url": "{{HOST}}{{PORT}}/authors",
+            "method": "GET",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": {
+              "type": "inherited"
+            },
+            "body": {
+              "type": "none",
+              "file": {
+                "name": ""
+              },
+              "text": {
+                "value": "",
+                "format": "application/json"
+              },
+              "form": {
+                "isMultipart": false,
+                "fields": []
+              },
+              "graphql": {
+                "query": "",
+                "variables": ""
+              }
+            }
+          },
+          {
+            "name": "Get author by id",
+            "url": "{{HOST}}{{PORT}}/authors/1",
+            "method": "GET",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": {
+              "type": "inherited"
+            },
+            "body": {
+              "type": "none",
+              "file": {
+                "name": ""
+              },
+              "text": {
+                "value": "",
                 "format": "application/json"
               },
               "form": {
