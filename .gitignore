@@ -11,3 +11,4 @@ db.*
 *.tmp
 *.code-workspace
 .DS_Store
+*.db
