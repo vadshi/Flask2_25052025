@@ -7,7 +7,6 @@ from api.models.quote import QuoteModel
 @app.post("/authors")
 def create_author():
     author_data = request.json
-    # add_to_db(AuthorModel, author_data)  # Variant 2
     try:
         author = AuthorModel(**author_data)
         db.session.add(author)
