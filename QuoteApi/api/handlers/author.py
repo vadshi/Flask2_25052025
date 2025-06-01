@@ -1,40 +1,46 @@
+from marshmallow import ValidationError
 from api import db, app
 from flask import request, abort, jsonify
 from api.models.author import AuthorModel
 from sqlalchemy.exc import SQLAlchemyError
-from api.schemas.author import author_schema, authors_schema
+from api.schemas.author import author_schema
 
 @app.post("/authors")
 def create_author():
-    author_data = request.json
     try:
-        author = AuthorModel(**author_data)
+        # 1. Get raw bytes
+        # 2. Load bytes to dict
+        # 3. Create new AuthorModel instance via dict
+        # author = AuthorModel(**author_data)
+        author = author_schema.loads(request.data)  # get_data() return raw bytes
         db.session.add(author)
         db.session.commit()
-    except TypeError:
-        abort(400, f"Invalid data. Required: <name>. Received: {', '.join(author_data.keys())}")
+    except ValidationError as ve:
+        abort(400, f"Validation error: {str(ve)}")
     except Exception as e:
         abort(503, f"Database error: {str(e)}")
-    return jsonify(author.to_dict()), 201
+    # db instance -> dict -> json
+    return jsonify(author_schema.dump(author)), 201
 
 
 @app.get("/authors")
 def get_authors():
     authors = db.session.scalars(db.select(AuthorModel)).all()
-    return jsonify(authors_schema.dump(authors)), 200
+    return jsonify(author_schema.dump(authors, many=True)), 200
 
 
 @app.get('/authors/<int:author_id>')
 def get_author_by_id(author_id: int):
     author = db.get_or_404(AuthorModel, author_id, description=f"Author with id={author_id} not found")
     # instance -> dict -> json
-    return jsonify(author.to_dict()), 200
+    return jsonify(author_schema.dump(author)), 200
 
 
 @app.put("/authors/<int:author_id>")
 def edit_authors(author_id: int):
     """ Update an existing quote """
-    new_data = request.json
+    new_data = request.json # get_json() -> need load
+    # author_data = request.data # get_data() -> need .loads
 
     # Проверка на пустой словарь, т.е. есть данные для обновления
     if not new_data: # check that new_data is not {}

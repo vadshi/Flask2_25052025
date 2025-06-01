@@ -13,9 +13,15 @@ class AuthorModel(db.Model):
     surname: Mapped[str] = mapped_column(String(32), default="Petrov", server_default="Smirnov", index=True)
     quotes: Mapped[list['QuoteModel']] = relationship(lambda: QuoteModel, back_populates='author', lazy='dynamic', cascade="all, delete-orphan") # type: ignore
 
-    def __init__(self, name, surname):
+    def __init__(self, name, surname="Petrov"):
         self.name = name
         self.surname = surname
 
     def to_dict(self):
         return {"id": self.id, "name": self.name, "surname": self.surname}
+    
+    def __str__(self):
+        repr(self)
+
+    def __repr__(self):
+        return f'Author{self.name, self.surname}'    
