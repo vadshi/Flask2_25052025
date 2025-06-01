@@ -1,9 +1,9 @@
-from marshmallow import ValidationError
+from marshmallow import ValidationError, EXCLUDE
 from api import db, app
 from flask import request, abort, jsonify
 from api.models.author import AuthorModel
 from sqlalchemy.exc import SQLAlchemyError
-from api.schemas.author import author_schema
+from api.schemas.author import author_schema, change_author_schema
 
 @app.post("/authors")
 def create_author():
@@ -42,9 +42,11 @@ def get_author_by_id(author_id: int):
 @app.put("/authors/<int:author_id>")
 def edit_authors(author_id: int):
     """ Update an existing quote """
-    new_data = request.json # get_json() -> need load
-    # author_data = request.data # get_data() -> need .loads
-
+    try:
+        new_data = change_author_schema.load(request.json, unknown=EXCLUDE) # get_json() -> need load
+    except ValidationError as ve:
+        return abort(400, f"Validation error: {str(ve)}.")
+    
     # Проверка на пустой словарь, т.е. есть данные для обновления
     if not new_data: # check that new_data is not {}
         return abort(400, "No valid data to update.")
@@ -53,9 +55,6 @@ def edit_authors(author_id: int):
 
     try:
         for key_as_attr, value in new_data.items():
-            # Проверка на лишние ключи(атрибуты)
-            if not hasattr(author, key_as_attr):
-                abort(400, f"Invalid key='{key_as_attr}'. Valid only 'name' and 'surname'")
             setattr(author, key_as_attr, value)
 
         db.session.commit()
