@@ -4,19 +4,21 @@ from schema import AuthorSchema
 
 json_data = """
 {   
+   "id": 4, 
    "name": "Ivan",
-   "email": "ivan@mail.ru"
+   "email": "ivan@mail.ru",
+   "age": 12
 }
 """
 try:
     schema = AuthorSchema()
     # json string -> validated dict
-    json_data_as_dict = schema.loads(json_data)
+    json_data_as_dict = schema.loads(json_data, unknown=INCLUDE)
     print(type(json_data_as_dict), json_data_as_dict)
 except ValidationError as e:
     print(e)
 
 # dict > valildate dict
-result = schema.load(json_data_as_dict)
+result = schema.load(json_data_as_dict, unknown=INCLUDE)
 print(type(result), result)
-print(Author(**result))
+# print(Author(**result))
