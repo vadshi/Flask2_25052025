@@ -58,7 +58,7 @@ def get_quotes_count() -> int:
 
 @app.put("/quotes/<int:quote_id>")
 def edit_quote(quote_id: int):
-    """ Update an existing quote """
+    """TODO. Update edit using ma """
     new_data = request.json
     result = check(new_data, check_rating=True)
     if not result[0]:
