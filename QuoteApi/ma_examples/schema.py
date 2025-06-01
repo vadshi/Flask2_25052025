@@ -2,7 +2,11 @@ from marshmallow import Schema, fields
 
 
 class AuthorSchema(Schema):
-    id = fields.Integer(strict=True)
+    id = fields.Integer(
+        required=True, 
+        strict=True, 
+        dump_only=True
+        )
     name = fields.String(
         required=True, 
         error_messages={"required": "field 'name' is required"}
