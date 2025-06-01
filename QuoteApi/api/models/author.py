@@ -8,10 +8,13 @@ class AuthorModel(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(32), index=True, unique=True)
-    quotes: Mapped[list['QuoteModel']] = relationship(back_populates='author', lazy='dynamic') # type: ignore
+    # default -> for new instance, server_default -> for instances that already exist in table
+    surname: Mapped[str] = mapped_column(String(32), default="Petrov", server_default="Smirnov", index=True)
+    quotes: Mapped[list['QuoteModel']] = relationship(back_populates='author', lazy='dynamic', cascade="all, delete-orphan") # type: ignore
 
-    def __init__(self, name):
+    def __init__(self, name, surname):
         self.name = name
+        self.surname = surname
 
     def to_dict(self):
-        return {"id": self.id, "name": self.name}
+        return {"id": self.id, "name": self.name, "surname": self.surname}
