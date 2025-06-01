@@ -2,6 +2,7 @@ from api import db, app
 from flask import request, abort, jsonify
 from api.models.author import AuthorModel
 from sqlalchemy.exc import SQLAlchemyError
+from api.schemas.author import author_schema, authors_schema
 
 @app.post("/authors")
 def create_author():
@@ -19,9 +20,8 @@ def create_author():
 
 @app.get("/authors")
 def get_authors():
-    authors_db = db.session.scalars(db.select(AuthorModel)).all()
-    authors = [author.to_dict() for author in authors_db]
-    return jsonify(authors), 200
+    authors = db.session.scalars(db.select(AuthorModel)).all()
+    return jsonify(authors_schema.dump(authors)), 200
 
 
 @app.get('/authors/<int:author_id>')
