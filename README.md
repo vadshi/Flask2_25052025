@@ -67,3 +67,7 @@ flask db merge heads -m "Merge two heads"
     "jinja-html": "html"
 }
 ```
+
+Homework day3
+1. Добавить роли
+2. Создать формы для регистрации и логина пользователей
