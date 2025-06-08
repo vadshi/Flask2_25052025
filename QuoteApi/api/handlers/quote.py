@@ -1,5 +1,5 @@
 from marshmallow import ValidationError
-from api import db, app, auth
+from api import db, app, multi_auth
 from flask import abort, jsonify, request
 from api.models.quote import QuoteModel
 from api.models.author import AuthorModel
@@ -17,9 +17,9 @@ def get_quotes():
 
 # URL: "/authors/<int:author_id>/quotes"
 @app.route("/authors/<int:author_id>/quotes", methods=["GET", "POST"])
-@auth.login_required
+@multi_auth.login_required
 def author_quotes(author_id: int):
-    print("user =", auth.current_user())
+    print("user =", multi_auth.current_user())
     print(request.headers.get('Authorization'))
 
     author = db.get_or_404(AuthorModel, author_id, description=f"Author with id={author_id} not found")
