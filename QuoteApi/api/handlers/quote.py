@@ -20,7 +20,8 @@ def get_quotes():
 @auth.login_required
 def author_quotes(author_id: int):
     print("user =", auth.current_user())
-    
+    print(request.headers.get('Authorization'))
+
     author = db.get_or_404(AuthorModel, author_id, description=f"Author with id={author_id} not found")
 
     if request.method == "GET":

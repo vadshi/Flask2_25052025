@@ -50,3 +50,9 @@ sqlite3 quotes.db ".schema quotes" > db_sql/db_schema.sql
 ```
 sqlite3 new_store.db ".read db_sql/db_data.sql"
 ```
+
+## Дополнительно
+Как объединить две `головы(heads)` в миграциях
+```
+flask db merge heads -m "Merge two heads"
+```
