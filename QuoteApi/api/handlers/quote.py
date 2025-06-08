@@ -19,7 +19,6 @@ def get_quotes():
 @app.route("/authors/<int:author_id>/quotes", methods=["GET", "POST"])
 @multi_auth.login_required
 def author_quotes(author_id: int):
-    print("user =", multi_auth.current_user())
     print(request.headers.get('Authorization'))
 
     author = db.get_or_404(AuthorModel, author_id, description=f"Author with id={author_id} not found")

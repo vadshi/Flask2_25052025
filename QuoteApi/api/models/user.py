@@ -54,7 +54,6 @@ class UserModel(db.Model):
         try:
             data = s.loads(token)
         except BadSignature as bde:
-            print(f"{bde = }")
             return None  # invalid token
         user = db.get_or_404(UserModel, data['id'], description=f"User with id={data['id']} not found")
         return user
