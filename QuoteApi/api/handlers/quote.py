@@ -5,7 +5,6 @@ from api.models.quote import QuoteModel
 from api.models.author import AuthorModel
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError, InvalidRequestError
-# from . import check
 from api.schemas.quote import quote_schema, quotes_schema, change_quotes_without_rating
 
 
