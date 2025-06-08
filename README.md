@@ -52,7 +52,18 @@ sqlite3 new_store.db ".read db_sql/db_data.sql"
 ```
 
 ## Дополнительно
-Как объединить две `головы(heads)` в миграциях
+1. Как объединить две `головы(heads)` в миграциях
 ```
 flask db merge heads -m "Merge two heads"
+```
+
+2. Поддержка шаблонов `Jinja2` -> дополнение `Better Jinja`  
+Добавить в `settings.json`: 
+```
+"files.associations": {
+  "*.html": "jinja-html"
+},
+"emmet.includeLanguages": {
+    "jinja-html": "html"
+}
 ```
