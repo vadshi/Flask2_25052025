@@ -26,11 +26,9 @@ def get_users():
 
 # url:  /users - POST
 @app.post("/users")
-def create_user():
-    try:
-        user = user_schema.loads(request.data)
-        user.save()
-    except ValidationError as ve:
-        abort(400, f"Validation error: {ve.messages_dict}")
-    
-    return jsonify(user_schema.dump(user)), 201
+@app.input(UserSchema, arg_name='user')
+@app.output(UserSchema, status_code=201)
+@app.doc(summary="Create new user", description="Create new user and save to db", tags=["users"], responses=['400', '503'])
+def create_user(user):
+    user.save()  
+    return user
