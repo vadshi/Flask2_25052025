@@ -3,7 +3,7 @@ from api import db, app, token_auth
 from flask import request, abort, jsonify
 from api.models.author import AuthorModel
 from sqlalchemy.exc import SQLAlchemyError
-from api.schemas.author import AuthorSchema
+from api.schemas.author import AuthorSchema, MessageOut
 
 @app.post("/authors")
 @app.auth_required(token_auth)
@@ -63,13 +63,15 @@ def edit_authors(author_id: int, author_data):
 
 @app.delete("/authors/<int:author_id>")
 @app.auth_required(token_auth)
+@app.output(MessageOut)
+@app.doc(summary="Delete author by id", description="Delete author by id", tags=["Authors"], responses=[503])
 def delete_author(author_id):
     """Delete author by id """
     author = db.get_or_404(entity=AuthorModel, ident=author_id, description=f"Author with id={author_id} not found")
     db.session.delete(author)
     try:
         db.session.commit()
-        return jsonify({"message": f"Author with id {author_id} has deleted."}), 200
+        return {"message": f"Author with id {author_id} has deleted."}, 200
     except SQLAlchemyError as e:
         db.session.rollback()
         abort(503, f"Database error: {str(e)}")
