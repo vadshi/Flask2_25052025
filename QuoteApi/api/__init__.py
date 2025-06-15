@@ -4,13 +4,14 @@ from sqlalchemy.orm import DeclarativeBase
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth, MultiAuth
-from flasgger import Swagger
+from apiflask import APIFlask
 
 class Base(DeclarativeBase):
     pass
 
 
-app = Flask(__name__)
+app = APIFlask(__name__, title="Quote API", version="1.0")
+app.tags = ["Quotes and Authors"]
 app.json.ensure_ascii = False
 app.config.from_object("config.DevConfig")
 
@@ -22,7 +23,7 @@ ma.init_app(app)
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth(scheme="Bearer")
 multi_auth = MultiAuth(basic_auth, token_auth)
-swagger = Swagger(app)
+
 
 @basic_auth.verify_password
 def verify_password(username, password):
