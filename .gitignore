@@ -12,3 +12,5 @@ db.*
 *.code-workspace
 .DS_Store
 *.db
+*.log
+*.pot
