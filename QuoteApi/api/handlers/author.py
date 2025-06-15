@@ -28,33 +28,34 @@ def get_authors():
 
 
 @app.get('/authors/<int:author_id>')
+@app.output(AuthorSchema)
+@app.doc(summary="Get author by id", description="Get author by id", tags=["Authors"])
 def get_author_by_id(author_id: int):
     author = db.get_or_404(AuthorModel, author_id, description=f"Author with id={author_id} not found")
     # instance -> dict -> json
-    return jsonify(author_schema.dump(author)), 200
+    return author, 200
 
 
 @app.put("/authors/<int:author_id>")
 @app.auth_required(token_auth)
-def edit_authors(author_id: int):
-    """ Update an existing quote """
-    try:
-        new_data = change_author_schema.load(request.json, unknown=EXCLUDE) # get_json() -> need load
-    except ValidationError as ve:
-        return abort(400, f"Validation error: {str(ve)}.")
+@app.input(AuthorSchema(load_instance=False, partial=True), arg_name="author_data")
+@app.output(AuthorSchema)
+@app.doc(summary="Get author by id", description="Get author by id", tags=["Authors"], responses=[400, 503])
+def edit_authors(author_id: int, author_data):
+    """ Update an existing author """
     
     # Проверка на пустой словарь, т.е. есть данные для обновления
-    if not new_data: # check that new_data is not {}
-        return abort(400, "No valid data to update.")
+    if not author_data: # check that new_data is not {}
+        return abort(400, "No data to update.")
 
     author = db.get_or_404(entity=AuthorModel, ident=author_id, description=f"Author with id={author_id} not found")
 
     try:
-        for key_as_attr, value in new_data.items():
+        for key_as_attr, value in author_data.items():
             setattr(author, key_as_attr, value)
 
         db.session.commit()
-        return jsonify(author_schema.dump(author)), 200
+        return author, 200
     except SQLAlchemyError as e:
         db.session.rollback()
         abort(503, f"Database error: {str(e)}")

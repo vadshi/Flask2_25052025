@@ -7,7 +7,6 @@ from api.models.user import UserModel
 # @multi_auth.login_required
 @app.auth_required(basic_auth)
 def get_auth_token():
-    print(f'{basic_auth.current_user = }')
     username = basic_auth.current_user
     user = db.one_or_404(db.select(UserModel).filter_by(username=username))
     token = user.generate_auth_token()
