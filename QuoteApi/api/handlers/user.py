@@ -28,7 +28,7 @@ def get_users():
 @app.post("/users")
 @app.input(UserSchema, arg_name='user', example={"username": "newuser", "password": "newpass"})
 @app.output(UserSchema, status_code=201)
-@app.doc(summary="Create new user", description="Create new user and save to db", tags=["users"], responses=['400', '503'])
+@app.doc(summary="Create new user", description="Create new user and save to db", tags=["users"], responses=[400, 503])
 def create_user(user):
     user.save()  
     return user

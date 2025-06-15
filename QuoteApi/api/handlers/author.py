@@ -3,34 +3,28 @@ from api import db, app, token_auth
 from flask import request, abort, jsonify
 from api.models.author import AuthorModel
 from sqlalchemy.exc import SQLAlchemyError
-from api.schemas.author import author_schema, change_author_schema
+from api.schemas.author import AuthorSchema
 
 @app.post("/authors")
-@token_auth.login_required
-def create_author():
+@app.auth_required(token_auth)
+@app.input(AuthorSchema, arg_name="author")
+@app.output(AuthorSchema, status_code=201)
+@app.doc(summary="Create new author", description="Create new author", responses=[503], tags=["Authors"])
+def create_author(author):
     try:
-        # 1. Get raw bytes
-        # print(f'{request.data =})
-        # 2. Load bytes to dict
-        # author_data = author_schema.loads(request.data)
-        # print(f'{author_data = }, {type(author_data)})
-        # 3. Create new AuthorModel instance via dict
-        # author = AuthorModel(**author_data)
-        author = author_schema.loads(request.data)  # get_data() return raw bytes
         db.session.add(author)
         db.session.commit()
-    except ValidationError as ve:
-        abort(400, f"Validation error: {str(ve)}")
     except Exception as e:
         abort(503, f"Database error: {str(e)}")
     # db instance -> dict -> json
-    return jsonify(author_schema.dump(author)), 201
+    return author
 
 
 @app.get("/authors")
+@app.output(AuthorSchema(many=True))
+@app.doc(summary="Get all authors", description="Get all authors", tags=["Authors"])
 def get_authors():
-    authors = db.session.scalars(db.select(AuthorModel)).all()
-    return jsonify(author_schema.dump(authors, many=True)), 200
+    return db.session.scalars(db.select(AuthorModel)).all(), 200
 
 
 @app.get('/authors/<int:author_id>')
@@ -41,7 +35,7 @@ def get_author_by_id(author_id: int):
 
 
 @app.put("/authors/<int:author_id>")
-@token_auth.login_required
+@app.auth_required(token_auth)
 def edit_authors(author_id: int):
     """ Update an existing quote """
     try:
@@ -67,7 +61,7 @@ def edit_authors(author_id: int):
 
 
 @app.delete("/authors/<int:author_id>")
-@token_auth.login_required
+@app.auth_required(token_auth)
 def delete_author(author_id):
     """Delete author by id """
     author = db.get_or_404(entity=AuthorModel, ident=author_id, description=f"Author with id={author_id} not found")
