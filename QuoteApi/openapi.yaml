@@ -1,0 +1,349 @@
+info:
+  title: Quote API
+  version: '1.0'
+tags:
+- name: Quotes and Authors
+paths:
+  /users:
+    get:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: Successful response
+      tags:
+      - users
+      summary: Get all users
+      description: Get all users
+    post:
+      parameters: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Successful response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+          description: Validation error
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Bad Request
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Service Unavailable
+      tags:
+      - users
+      summary: Create new user
+      description: Create new user and save to db
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              username: newuser
+              password: newpass
+  /quotes:
+    get:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful response
+      summary: "\u0424\u0443\u043D\u043A\u0446\u0438\u044F \u0432\u043E\u0437\u0432\
+        \u0440\u0430\u0449\u0430\u0435\u0442 \u0432\u0441\u0435 \u0446\u0438\u0442\
+        \u0430\u0442\u044B \u0438\u0437 \u0411\u0414."
+  /authors:
+    get:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: &id001 {}
+          description: Successful response
+      summary: Get Authors
+    post:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: *id001
+          description: Successful response
+      summary: Create Author
+  /auth/token:
+    get:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful response
+      summary: Get Auth Token
+  /quotes/count:
+    get:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful response
+      summary: Return count of quotes in db.
+  /quotes/filter:
+    get:
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful response
+      summary: Filter Quotes
+  /users/{user_id}:
+    get:
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      tags:
+      - users
+      summary: Get user by id
+      description: Get user by id
+  /quotes/{quote_id}:
+    get:
+      parameters:
+      - in: path
+        name: quote_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: &id002 {}
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      summary: Return quote by id from db.
+    put:
+      parameters:
+      - in: path
+        name: quote_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: *id002
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      summary: TODO. Update edit using ma
+    delete:
+      parameters:
+      - in: path
+        name: quote_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: *id002
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      summary: Delete quote by id
+  /authors/{author_id}:
+    get:
+      parameters:
+      - in: path
+        name: author_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: &id003 {}
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      summary: Get Author By Id
+    put:
+      parameters:
+      - in: path
+        name: author_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: *id003
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      summary: Update an existing quote
+    delete:
+      parameters:
+      - in: path
+        name: author_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: *id003
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      summary: Delete author by id
+  /authors/{author_id}/quotes:
+    get:
+      parameters:
+      - &id004
+        in: path
+        name: author_id
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: &id005 {}
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      summary: Author Quotes
+    post:
+      parameters:
+      - *id004
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: *id005
+          description: Successful response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+          description: Not found
+      summary: Author Quotes
+openapi: 3.0.3
+components:
+  schemas:
+    ValidationError:
+      properties:
+        detail:
+          type: object
+          properties:
+            <location>:
+              type: object
+              properties:
+                <field_name>:
+                  type: array
+                  items:
+                    type: string
+        message:
+          type: string
+      type: object
+    HTTPError:
+      properties:
+        detail:
+          type: object
+        message:
+          type: string
+      type: object
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 4
+        password:
+          type: string
+          minLength: 5
+          maxLength: 15
+        id:
+          type: integer
+          readOnly: true
+      required:
+      - password
+      - username
+

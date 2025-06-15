@@ -68,6 +68,17 @@ flask db merge heads -m "Merge two heads"
 }
 ```
 
-Homework day3
-1. Добавить роли
-2. Создать формы для регистрации и логина пользователей
+## Работа с OpenAPI v3.x.x
+1. Основной URL `/docs`
+2. Посмотреть спецификацию в терминале:
+```
+flask spec
+```
+3. Сгенерировать в формате `json`
+```
+flask spec --output openapi.json
+```
+4. Сгенерировать в формате `yaml`
+```
+flask spec --format yaml --output openapi.yaml
+```
